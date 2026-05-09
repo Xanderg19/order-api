@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,5 +17,6 @@ public class OrderDTO {
 
     private Long orderId;
     private OrderStatus status;
+
 
 }
