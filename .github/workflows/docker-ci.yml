@@ -37,6 +37,15 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+            
+
       - name: Build Java
         run: mvn clean install -Dspring.profiles.active=test
 
@@ -70,6 +79,7 @@ jobs:
         run: echo "TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
       - name: Build Docker Image
+        if: github.ref == 'refs/heads/main'
         run: |
           docker build -t xanderg19/order_api:$TAG .
           docker tag xanderg19/order_api:$TAG xanderg19/order_api:latest
