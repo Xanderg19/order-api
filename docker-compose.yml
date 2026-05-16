@@ -1,43 +1,43 @@
 services:
-
   db:
     container_name: db_test
     image: postgres:17
     environment:
       POSTGRES_DB: apibank
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: hector
+      POSTGRES_PASSWORD: 12345
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U hector -d apibank" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  redis:
+    image: redis
+    container_name: redis_test
+    ports:
+      - "6379:6379"
+
   app:
     build: .
-    container_name: order_api
+    container_name: order_status
     depends_on:
       - db
       - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/apibank
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_USERNAME: hector
+      SPRING_DATASOURCE_PASSWORD: 12345
 
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
 
     ports:
       - "8080:8080"
-
-  redis:
-    container_name: redis-test
-    image: redis:7
-    ports:
-      - "6379:6379"
 
 volumes:
   postgres_data:

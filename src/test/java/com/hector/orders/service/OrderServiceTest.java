@@ -1,5 +1,6 @@
 package com.hector.orders.service;
 
+import com.hector.orders.exception.OrderNotFoundException;
 import com.hector.orders.model.entity.Order;
 import com.hector.orders.model.entity.OrderItem;
 import com.hector.orders.model.entity.Product;
@@ -106,6 +107,24 @@ public class OrderServiceTest {
         // Assert
         assertEquals(
                 "Stock insuficiente para el producto",
+                exception.getMessage()
+        );
+    }
+    @Test
+    void deberiaLanzarErrorSiOrdenNoExisteOrden() {
+
+        // Arrange
+        when(orderRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        // Act + Assert
+        OrderNotFoundException exception = assertThrows(
+                OrderNotFoundException.class,
+                () -> orderService.getOrder(1L)
+        );
+
+        assertEquals(
+                "Orden no encontrada",
                 exception.getMessage()
         );
     }

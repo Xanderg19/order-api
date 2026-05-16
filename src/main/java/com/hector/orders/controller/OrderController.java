@@ -5,6 +5,7 @@ import com.hector.orders.model.entity.OrderItem;
 import com.hector.orders.model.entity.dto.OrderDTO;
 import com.hector.orders.model.entity.dto.OrderItemsDTO;
 import com.hector.orders.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,8 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}/items")
-    public Order createOrderItem(@PathVariable Long orderId, @RequestBody OrderItemsDTO orderItem) {
-
+    public Order createOrderItem(@PathVariable Long orderId, @Valid @RequestBody OrderItemsDTO orderItem) {
+        System.out.println("test");
         return orderService.createOrderItem(orderId,orderItem);
 
     }
@@ -32,5 +33,10 @@ public class OrderController {
     public void confirmOrder(@PathVariable Long orderId) {
 
     }
+    @GetMapping("/{orderId}")
+    public Order getOrder(@PathVariable Long orderId) {
+        return orderService.getOrder(orderId);
+    }
+
 
 }
