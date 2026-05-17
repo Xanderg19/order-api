@@ -109,5 +109,10 @@ jobs:
 
       - name: carpeta actual
         run: pwd
+      - name: Ver archivos
+        run: ls -la
+
+      - name: Ver carpeta target
+        run: ls -la target
 
 
