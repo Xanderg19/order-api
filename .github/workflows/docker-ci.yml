@@ -90,3 +90,24 @@ jobs:
         run: |
           docker push xanderg19/order_api:$TAG
           docker push xanderg19/order_api:latest
+  info:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: info rama
+        run: echo $GITHUB_REF
+
+      - name: info commit
+        run: echo $GITHUB_SHA
+
+      - name: info sistema
+        run: echo $RUNNER_OS
+
+      - name: usuario runner
+        run: whoami
+
+      - name: carpeta actual
+        run: pwd
+
+
