@@ -1,5 +1,7 @@
 name: Java CI
-
+env:
+    APP_NAME: order_api
+    DOCKER_USER: xanderg19
 on:
   push:
     branches: ["**"]
@@ -82,19 +84,27 @@ jobs:
       - name: Build Docker Image
         if: github.ref == 'refs/heads/main'
         run: |
-          docker build -t xanderg19/order_api:$TAG .
-          docker tag xanderg19/order_api:$TAG xanderg19/order_api:latest
+          docker build -t $DOCKER_USER/$APP_NAME:$TAG .
+          docker tag $DOCKER_USER/$APP_NAME $DOCKER_USER/$APP_NAME:latest
 
       - name: Push Docker Images
         if: github.ref == 'refs/heads/main'
         run: |
-          docker push xanderg19/order_api:$TAG
-          docker push xanderg19/order_api:latest
+          docker push $DOCKER_USER/$APP_NAME:$TAG
+          docker push $DOCKER_USER/$APP_NAME:latest
   info:
     runs-on: ubuntu-latest
     needs: build
 
+
+
     steps:
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: target/
+
       - name: info rama
         run: echo $GITHUB_REF
 
@@ -114,5 +124,31 @@ jobs:
 
       - name: Ver carpeta target
         run: ls -la target
+      - name: variables
+        run: echo "ENV=DEV" >> $GITHUB_ENV
+
+      - name: mostrar
+        run: echo $ENV
+      - name: Nombre workflow
+        run: echo ${{ github.workflow}}
+      - name: Nombre repo
+        run: echo ${{ github.repository }}
+
+      - name: Actor
+        run: echo ${{ github.actor }}
+      - name: Solo main
+        if: github.ref == 'refs/heads/main'
+        run: echo "Estoy en main"
+      - name: No estoy  main
+        if: github.ref != 'refs/heads/main'
+        run: echo "No estoy en main"
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: validar
+        run: echo "validar calidad..."
+
+
 
 
