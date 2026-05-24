@@ -64,14 +64,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
 
       - name: Download JAR
         uses: actions/download-artifact@v4
         with:
           name: app-jar
           path: target/
+
       - name: test
         run: mvn test
+
       - name: version java
         run: java --version
 
