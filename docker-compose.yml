@@ -6,6 +6,7 @@ services:
       POSTGRES_DB: apibank
       POSTGRES_USER: hector
       POSTGRES_PASSWORD: 12345
+      restart: always
     ports:
       - "5433:5432"
     volumes:
@@ -16,9 +17,20 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: elestio/pgadmin
+    container_name: pg_admin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: hector12alfro@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123
+      PGADMIN_LISTEN_PORT: 8081
+    ports:
+      - "8081:8080"
+
   redis:
     image: redis
     container_name: redis_test
+    restart: always
     ports:
       - "6379:6379"
 
@@ -28,11 +40,11 @@ services:
     depends_on:
       - db
       - redis
+    restart: always
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/apibank
       SPRING_DATASOURCE_USERNAME: hector
       SPRING_DATASOURCE_PASSWORD: 12345
-
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
 

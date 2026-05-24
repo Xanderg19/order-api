@@ -30,7 +30,9 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/confirm")
+
     public void confirmOrder(@PathVariable Long orderId) {
+        System.out.println("test");
 
     }
     @GetMapping("/{orderId}")
